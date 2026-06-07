@@ -76,7 +76,7 @@ for i in range(4):
     axes[i + 1].set_ylabel("Value [-]")
 
 axes[5].plot(df["Date"], residual, color="tab:red")
-axes[5].set_title("Residual / Trend [-]")
+axes[5].set_title("Residual [-]")
 axes[5].set_ylabel("Value [-]")
 
 plt.tight_layout()

@@ -110,8 +110,8 @@ legend_elements = [
 ax.legend(handles=legend_elements, loc='upper right')
 
 #ax.set_title('Iran Provinces, International Water Bodies, Topography, and 6 Weather Stations')
-ax.set_xlabel('Longitude  (°E)')
-ax.set_ylabel('Latitude  (°N)')
+ax.set_xlabel('Longitude  (°E)', fontsize=15)
+ax.set_ylabel('Latitude  (°N)', fontsize=15)
 ax.set_xlim(43, 65)
 ax.set_ylim(23, 40)
 
@@ -154,24 +154,86 @@ axins = inset_axes(
     bbox_transform=ax.transAxes,
     loc='lower left',
     borderpad=2
-)
+    )
+
+import numpy as np
 
 colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown']
-for i, (station, data) in enumerate(stations_data.items()):
-    # Plot temperature (x) vs precipitation (y) for each station
-    axins.plot(data['t'], data['p'], marker='o', label=station, color=colors[i])
 
+for i, (station, data) in enumerate(stations_data.items()):
+    c = colors[i % len(colors)]
+
+    # Monthly temperature-precipitation line
+    axins.plot(
+        data['t'],
+        data['p'],
+        marker='s',
+        label=station,
+        color=c
+    )
+
+    # Annual values: mean temperature and total precipitation
+    t_ann = np.mean(data['t'])
+    p_ann = np.sum(data['p'])
+
+    # Add annual point in the same color
+    axins.scatter(
+        t_ann,
+        p_ann,
+        color=c,
+        s=90,
+        edgecolor='black',
+        zorder=5
+    )
+
+# Axes and styling
 axins.set_xlabel('Air Temperature (°C)', fontsize=10)
 axins.set_ylabel('Precipitation (mm)', fontsize=10)
 axins.set_title('Monthly Climograph', fontsize=11)
-axins.legend(fontsize=8, loc='upper left', frameon=True)
 axins.grid(True, linestyle='--', alpha=0.5)
 
-plt.draw()
+# Plot limits
+axins.set_xlim(-2, 34)
+axins.set_ylim(0, 1855)
 
+# Example De Martonne classification lines
+T_line = np.linspace(-2, 34, 300)
+
+I_arid = 10
+P_arid = I_arid * (T_line + 10)
+axins.plot(T_line, P_arid, color='black', linestyle='-', linewidth=1.8,
+        label='De Martonne = 10: Arid')
+
+I_humid = 28
+P_humid = I_humid * (T_line + 10)
+axins.plot(T_line, P_humid, color='black', linestyle=':', linewidth=1.8,
+        label='De Martonne = 28: Humid')
+
+axins.legend(fontsize=8, loc='upper left', frameon=True)
+fig.text(0.94, 0.92, '(a)', ha='left', va='top', fontsize=16, fontweight='bold')
+
+plt.draw()
 plt.tight_layout()
 
+
+#colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown']
+#for i, (station, data) in enumerate(stations_data.items()):
+#    # Plot temperature (x) vs precipitation (y) for each station
+#    axins.plot(data['t'], data['p'], marker='o', label=station, color=colors[i])
+#
+#axins.set_xlabel('Air Temperature (°C)', fontsize=10)
+#axins.set_ylabel('Precipitation (mm)', fontsize=10)
+#axins.set_title('Monthly Climograph', fontsize=11)
+#axins.grid(True, linestyle='--', alpha=0.5)
+#axins.axhline(y=135, color='black', linestyle='--', linewidth=2,label='Aridity Threshold')
+#axins.legend(fontsize=8, loc='upper left', frameon=True)
+#fig.text(0.94, 0.92, '(a)', ha='left', va='top', fontsize=16, fontweight='bold')
+#
+#plt.draw()
+#
+#plt.tight_layout()
+
 # Save the figure as a TIFF file
-plt.savefig('iran_map_with_elevation_and_water_bodies.tiff', dpi=300, format='tiff')
+plt.savefig('iran_map_with_elevation_and_water_bodies2.tiff', dpi=300, format='tiff')
 
 plt.show()

@@ -36,7 +36,7 @@ for i, imf in enumerate(imf_labels):
 
 axes[0].set_xticks(x)
 axes[0].set_xticklabels(stations, rotation=0)
-axes[0].set_ylabel('IMF Value')
+axes[0].set_ylabel('Number of Runs')
 axes[0].set_title('a) Annual IMFs')
 axes[0].legend(title='IMF')
 axes[0].grid(True, axis='y', linestyle='--', alpha=0.3)
@@ -49,11 +49,12 @@ for i, imf in enumerate(imf_labels):
 
 axes[1].set_xticks(x)
 axes[1].set_xticklabels(stations, rotation=0)
+axes[1].set_ylabel('Number of Runs')
 axes[1].set_title('b) Monthly IMFs')
 axes[1].grid(True, axis='y', linestyle='--', alpha=0.3)
 
 fig.text(0.5, 0.04, 'Station', ha='center', fontsize=12)
 fig.tight_layout(rect=(0,0.05,1,1))
-plt.savefig('my_figure.png', bbox_inches='tight', dpi=300)
+plt.savefig('my_figure.tiff', bbox_inches='tight', dpi=300)
 plt.show()
 
